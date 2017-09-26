@@ -1,11 +1,13 @@
 <template>
-  <form @submit="submit">
+  <form @submit.prevent="submit">
     <div class="text">
       <div class="prompt">{{ prompt }}</div>
       <div :class="`percentage ${percentageColor}`" v-if="measured">{{ percentage }}</div>
     </div>
     <input autofocus type="text" v-model="message" @keydown="keydown" />
-    <button type="submit">Measure</button>
+    <button type="submit" :disabled="loading || message.trim() === ''">
+      {{ loading ? 'Loading...' : 'Measure' }}
+    </button>
   </form>
 </template>
 
@@ -14,7 +16,7 @@
   const DOWN_ARROW = 40
 
   export default {
-    data: function () {
+    data () {
       return {
         message: '',
         percentage: null,
@@ -22,25 +24,26 @@
         measured: false,
         history: [],
         historyIndex: -1,
+        loading: false,
       }
     },
     computed: {
-      percentageColor: function () {
+      percentageColor () {
         if (this.percentage >= 90) return 'red'
         if (this.percentage >= 75) return 'yellow'
         return 'blue'
-      }
+      },
     },
     methods: {
-      submit (e) {
-        e.preventDefault()
+      submit () {
+        this.loading = true
         fetch(`${__CONFIG__.backendUrl}/api/percentage`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: this.message,
+            message: this.message.trim(),
           }),
         }).then(response => response.json()).then(json => {
           this.measured = true
@@ -49,7 +52,12 @@
           this.history.unshift(this.message)
           this.message = ''
           this.historyIndex = -1
+        }).catch(() => {
+          /* display error */
         })
+          .then(() => {
+            this.loading = false
+          })
       },
       keydown (e) {
         if (e.keyCode === UP_ARROW && this.history.length - 1 > this.historyIndex) {
@@ -61,8 +69,8 @@
           this.message = this.history[this.historyIndex] || ''
           e.preventDefault()
         }
-      }
-    }
+      },
+    },
   }
 </script>
 
@@ -118,5 +126,12 @@
     padding: 6px 9px;
     color: white;
     font-size: 16px;
+    width: 100px;
+  }
+
+  button:disabled {
+    background-color: #aaa;
+    border-color: #aaa;
+    cursor: not-allowed;
   }
 </style>

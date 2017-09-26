@@ -3,6 +3,7 @@
   "name": "infometer",
   "version": "UNVERSIONED",
   "scripts": {
+    "lint": "eslint src/**/*.{js,vue}",
     "server": "webpack-dev-server --hot"
   },
   "dependencies": {
@@ -30,12 +31,9 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-vue": "^2.1.0",
     "vue-template-compiler": "^2.4.4",
     "webpack-dev-server": "^2.8.2"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }

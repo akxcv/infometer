@@ -1,6 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": "umbrellio",
+  "plugins": ["vue"],
   "rules": {
     "quotes": ["error", "single"]
   }
