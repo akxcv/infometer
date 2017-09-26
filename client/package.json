@@ -3,6 +3,8 @@
   "name": "infometer",
   "version": "UNVERSIONED",
   "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "NODE_ENV=production webpack -p",
     "lint": "eslint src/**/*.{js,vue}",
     "server": "webpack-dev-server --hot"
   },

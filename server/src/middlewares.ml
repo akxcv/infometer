@@ -30,3 +30,6 @@ let logger =
     )
   in
   Rock.Middleware.create ~filter ~name:"logger"
+
+let serve_static_files =
+  Middleware.static ~local_path:"./client" ~uri_prefix:"/"

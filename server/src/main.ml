@@ -26,6 +26,7 @@ let _ =
   App.empty
   |> middleware Middlewares.logger
   |> middleware Middlewares.allow_cors
+  |> middleware Middlewares.serve_static_files
   |> post_percentage
   |> accept_options
   |> App.run_command

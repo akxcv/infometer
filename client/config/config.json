@@ -1,5 +1,8 @@
 {
   "development": {
     "backendUrl": "http://localhost:9000"
+  },
+  "production": {
+    "backendUrl": ""
   }
 }
