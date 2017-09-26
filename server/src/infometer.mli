@@ -1,0 +1,1 @@
+val percentage : 'a -> int

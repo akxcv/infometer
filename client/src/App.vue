@@ -1,7 +1,9 @@
 <template>
   <form @submit="submit">
-    <div class="prompt">{{ prompt }}</div>
-    <div :class="`percentage ${percentage >= 90 ? 'red' : percentage >= 75 ? 'yellow' : ''}`" v-if="measured">{{ percentage }}</div>
+    <div class="text">
+      <div class="prompt">{{ prompt }}</div>
+      <div :class="`percentage ${percentageColor}`" v-if="measured">{{ percentage }}</div>
+    </div>
     <input autofocus type="text" v-model="message" />
     <button type="submit">Measure</button>
   </form>
@@ -12,9 +14,16 @@
     data: function () {
       return {
         message: '',
-        percentage: '',
+        percentage: null,
         prompt: 'Measure anything',
         measured: false,
+      }
+    },
+    computed: {
+      percentageColor: function () {
+        if (this.percentage >= 90) return 'red'
+        if (this.percentage >= 75) return 'yellow'
+        return 'blue'
       }
     },
     methods: {
@@ -47,16 +56,18 @@
     transform: translate(-50%, -50%);
   }
 
-  .percentage {
-    font-size: 50px;
+  .text {
     text-align: center;
     margin-bottom: 15px;
+  }
+
+  .percentage {
+    font-size: 50px;
     color: cornflowerblue;
   }
 
   .prompt {
     font-size: 25px;
-    text-align: center;
     max-width: 250px;
     margin: 0 auto;
   }

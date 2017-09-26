@@ -1,3 +1,4 @@
+S src/**
 B _build/src
 FLG -ppx '/Users/user_wrk/junk/infometer/_build/default/.ppx/ppx_jane/ppx.exe --as-ppx'
 FLG -w -40
