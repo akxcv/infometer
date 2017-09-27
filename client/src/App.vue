@@ -4,7 +4,7 @@
       <div class="prompt">{{ prompt }}</div>
       <div :class="`percentage ${percentageColor}`" v-if="measured">{{ percentage }}</div>
     </div>
-    <input autofocus type="text" v-model="message" @keydown="keydown" />
+    <input autofocus type="text" v-model="message" @keydown="keydown" :placeholder="placeholder" />
     <button type="submit" :disabled="loading || message.trim() === ''">
       {{ loading ? 'Loading...' : 'Measure' }}
     </button>
@@ -12,13 +12,15 @@
 </template>
 
 <script>
+  import queryString from 'query-string'
+
   const UP_ARROW = 38
   const DOWN_ARROW = 40
 
   export default {
     data () {
       return {
-        message: '',
+        message: queryString.parse(location.search).message || '',
         percentage: null,
         prompt: 'Measure anything',
         measured: false,
@@ -32,6 +34,9 @@
         if (this.percentage >= 90) return 'red'
         if (this.percentage >= 75) return 'yellow'
         return 'blue'
+      },
+      placeholder () {
+        return this.measured ? 'Measure something else' : ''
       },
     },
     methods: {
@@ -52,6 +57,11 @@
           this.history.unshift(this.message)
           this.message = ''
           this.historyIndex = -1
+          history.pushState(
+            this.prompt,
+            'Infometer',
+            `/index.html?${queryString.stringify({ message: this.prompt })}`
+          )
         }).catch(() => {
           /* display error */
         })
@@ -70,6 +80,11 @@
           e.preventDefault()
         }
       },
+    },
+    created () {
+      if (this.message) {
+        this.submit()
+      }
     },
   }
 </script>
@@ -116,6 +131,7 @@
     padding: 6px 9px;
     outline: none;
     font-size: 16px;
+    width: 200px;
   }
 
   button {
